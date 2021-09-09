@@ -1,5 +1,5 @@
 ---
-title: "Forest Health Defaunation - Primates"
+title: "Coal Mining Effects"
 author: "Peter Menzies"
 date: "9/9/2021"
 output: html_document
@@ -13,7 +13,7 @@ library(metafor)
 ```
 
 ```{r}
-datrich_raw <- read_csv(here("Gardner_et_al_data-KAR35vs02_onlyprimates_nospaces.csv"))
+datrich <- read_csv(here("Gardner_et_al_data-KAR35vs02_onlyprimates_nospaces.csv"))
 
 datrich <- datrich %>% 
   mutate(mean_diff = MeanvalueatHighFauna - MeanvalueatLowFauna) %>% 
@@ -28,20 +28,5 @@ datrich <- datrich %>%
   mutate(gw = g * w) 
 
 pooled_fixed_effect = sum(datrich$gw) / sum(datrich$w)
-```
-
-Using `metafor::escalc()`
-
-```{r}
-datrich_calc <- escalc(n2i = LowFaunaN, n1i = HighFaunaN, m2i = MeanvalueatLowFauna, m1i = MeanvalueatHighFauna, sd2i = SDatLowFauna, sd1i = SDatHighFauna, data = datrich_raw, measure = "SMD")
-
-# Forest plot
-rich_overall <- rma(yi, vi, method = "FE", data = datrich_calc)
-forest(rich_overall)
-
-# Funnel plot
-par(mfrow = c(2, 1))
-funnel(rich_overall, main = "Standard Error")
-funnel(rich_overall, yaxis = "seinv", main = "Inverse Standard Error")
 ```
 
